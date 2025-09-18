@@ -104,6 +104,7 @@ def create_workspace_and_dashboard():
 	if not frappe.db.exists("Workspace", "Facebook Integration"):
 		workspace = frappe.get_doc({
 			"doctype": "Workspace",
+			"label": "Facebook Integration",
 			"title": "Facebook Integration",
 			"icon": "facebook",
 			"module": "Facebook Integration",
@@ -112,47 +113,21 @@ def create_workspace_and_dashboard():
 		})
 		workspace.insert(ignore_permissions=True)
 	
-	# Create dashboard charts
-	charts = [
-		{
-			"name": "Facebook Messages",
-			"chart_type": "Line",
-			"document_type": "Facebook Message Log",
-			"group_by_based_on": "creation",
-			"time_interval": "Daily",
-			"timeseries": 1
-		},
-		{
-			"name": "Facebook Leads", 
-			"chart_type": "Bar",
-			"document_type": "Facebook Lead Log",
-			"group_by_based_on": "synced",
-			"timeseries": 0
-		},
-		{
-			"name": "Campaign Performance",
-			"chart_type": "Line", 
-			"document_type": "Facebook Campaign Metric",
-			"group_by_based_on": "date",
-			"value_based_on": "spend",
-			"time_interval": "Daily",
-			"timeseries": 1
-		}
-	]
-	
-	for chart_data in charts:
-		if not frappe.db.exists("Dashboard Chart", chart_data["name"]):
+	# Create basic dashboard charts
+	try:
+		if not frappe.db.exists("Dashboard Chart", "Facebook Messages"):
 			chart = frappe.get_doc({
 				"doctype": "Dashboard Chart",
-				"chart_name": chart_data["name"],
-				"chart_type": chart_data["chart_type"],
-				"document_type": chart_data["document_type"],
-				"group_by_based_on": chart_data["group_by_based_on"],
+				"chart_name": "Facebook Messages",
+				"chart_type": "Line",
+				"document_type": "Facebook Message Log",
+				"group_by_based_on": "creation",
 				"group_by_type": "Count",
-				"time_interval": chart_data.get("time_interval", "Daily"),
-				"timeseries": chart_data.get("timeseries", 0),
-				"value_based_on": chart_data.get("value_based_on", ""),
+				"time_interval": "Daily",
+				"timeseries": 1,
 				"is_public": 1,
 				"module": "Facebook Integration"
 			})
 			chart.insert(ignore_permissions=True)
+	except Exception:
+		pass
