@@ -1,0 +1,43 @@
+{
+ "chart_name": "Campaign Performance",
+ "chart_type": "Line",
+ "creation": "2024-01-01 00:00:00.000000",
+ "custom_options": "{\"colors\": [\"#007bff\", \"#28a745\", \"#ffc107\"]}",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart",
+ "document_type": "Facebook Campaign Metric",
+ "filters_json": "[]",
+ "group_by_based_on": "date",
+ "group_by_type": "Sum",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Facebook Integration",
+ "name": "Campaign Performance",
+ "number_of_groups": 0,
+ "owner": "Administrator",
+ "report_name": "",
+ "roles": [
+  {
+   "role": "Facebook Admin"
+  }
+ ],
+ "time_interval": "Daily",
+ "timeseries": 1,
+ "type": "Line",
+ "use_report_chart": 0,
+ "value_based_on": "spend",
+ "y_axis": [
+  {
+   "y_field": "spend"
+  },
+  {
+   "y_field": "leads"
+  },
+  {
+   "y_field": "clicks"
+  }
+ ]
+}

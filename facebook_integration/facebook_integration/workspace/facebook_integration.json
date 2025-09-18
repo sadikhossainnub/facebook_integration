@@ -1,0 +1,111 @@
+{
+ "charts": [
+  {
+   "chart_name": "Facebook Messages",
+   "label": "Facebook Messages"
+  },
+  {
+   "chart_name": "Facebook Leads",
+   "label": "Facebook Leads"
+  },
+  {
+   "chart_name": "Campaign Performance",
+   "label": "Campaign Performance"
+  }
+ ],
+ "content": "[{\"id\":\"_YQvQKvmJL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Facebook Integration</span>\",\"col\":12}},{\"id\":\"_F8vQKvmJL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Facebook Settings\",\"col\":3}},{\"id\":\"_G8vQKvmJL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Facebook Message Log\",\"col\":3}},{\"id\":\"_H8vQKvmJL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Facebook Lead Log\",\"col\":3}},{\"id\":\"_I8vQKvmJL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Facebook Campaign Metric\",\"col\":3}},{\"id\":\"_J8vQKvmJL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h5\\\">Analytics</span>\",\"col\":12}},{\"id\":\"_K8vQKvmJL\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Facebook Messages\",\"col\":6}},{\"id\":\"_L8vQKvmJL\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Facebook Leads\",\"col\":6}},{\"id\":\"_M8vQKvmJL\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Campaign Performance\",\"col\":12}}]",
+ "creation": "2024-01-01 00:00:00.000000",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "facebook",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Facebook Integration",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Settings",
+   "link_name": "Facebook Settings",
+   "link_to": "Facebook Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Messages",
+   "link_name": "Facebook Message Log",
+   "link_to": "Facebook Message Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Leads",
+   "link_name": "Facebook Lead Log",
+   "link_to": "Facebook Lead Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Campaign Metrics",
+   "link_name": "Facebook Campaign Metric",
+   "link_to": "Facebook Campaign Metric",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Facebook Integration",
+ "name": "Facebook Integration",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "format": "{} New",
+   "label": "Facebook Settings",
+   "link_to": "Facebook Settings",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "format": "{} New",
+   "label": "Facebook Message Log",
+   "link_to": "Facebook Message Log",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "format": "{} New",
+   "label": "Facebook Lead Log",
+   "link_to": "Facebook Lead Log",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "format": "{} New",
+   "label": "Facebook Campaign Metric",
+   "link_to": "Facebook Campaign Metric",
+   "type": "DocType"
+  }
+ ],
+ "title": "Facebook Integration"
+}
