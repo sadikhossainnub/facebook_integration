@@ -1,0 +1,124 @@
+/* Facebook Integration Custom Styles */
+
+.facebook-dashboard .card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.facebook-dashboard .stat-card {
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    color: white;
+    transition: transform 0.2s;
+}
+
+.facebook-dashboard .stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.facebook-dashboard .stat-card h3 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.facebook-dashboard .stat-card p {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+}
+
+.facebook-dashboard .btn-facebook {
+    background-color: #1877f2;
+    border-color: #1877f2;
+    color: white;
+}
+
+.facebook-dashboard .btn-facebook:hover {
+    background-color: #166fe5;
+    border-color: #166fe5;
+    color: white;
+}
+
+.facebook-dashboard .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: 600;
+}
+
+.facebook-dashboard .list-group-item {
+    border-left: none;
+    border-right: none;
+    padding: 0.75rem 1rem;
+}
+
+.facebook-dashboard .list-group-item:first-child {
+    border-top: none;
+}
+
+.facebook-dashboard .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.facebook-dashboard .badge {
+    font-size: 0.75rem;
+}
+
+.facebook-dashboard .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .facebook-dashboard .stat-card h3 {
+        font-size: 1.5rem;
+    }
+    
+    .facebook-dashboard .stat-card {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+}
+
+/* Animation for loading states */
+.facebook-dashboard .loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.facebook-dashboard .fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Custom scrollbar for message lists */
+.facebook-dashboard .list-group {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.facebook-dashboard .list-group::-webkit-scrollbar {
+    width: 6px;
+}
+
+.facebook-dashboard .list-group::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.facebook-dashboard .list-group::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.facebook-dashboard .list-group::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}

@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"NifrcqbG7W\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Facebook Integration</span>\",\"col\":12}},{\"id\":\"eVG6AU5R6w\",\"type\":\"card\",\"data\":{\"card_name\":\"Facebook Integration\",\"col\":4}}]",
+ "content": "[{\"id\":\"NifrcqbG7W\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Facebook Integration</span>\",\"col\":12}},{\"id\":\"rSotf6-bXu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Facebook Integration\",\"col\":3}},{\"id\":\"eVG6AU5R6w\",\"type\":\"card\",\"data\":{\"card_name\":\"Facebook Integration\",\"col\":4}}]",
  "creation": "2025-09-18 07:43:14.481105",
  "custom_blocks": [],
  "docstatus": 0,
@@ -63,7 +63,7 @@
    "type": "Link"
   }
  ],
- "modified": "2025-09-18 08:12:14.927414",
+ "modified": "2025-09-18 08:37:10.942967",
  "modified_by": "Administrator",
  "module": "Facebook Integration",
  "name": "Facebook Integration",
@@ -74,6 +74,14 @@
  "quick_lists": [],
  "roles": [],
  "sequence_id": 25.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Facebook Integration",
+   "type": "URL",
+   "url": "/facebook_integration"
+  }
+ ],
  "title": "Facebook Integration"
 }

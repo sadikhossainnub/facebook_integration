@@ -3,124 +3,488 @@
 {% block title %}Facebook Integration{% endblock %}
 
 {% block page_content %}
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<h1>Facebook Integration Dashboard</h1>
-			
-			<!-- Settings Section -->
-			<div class="card mb-4">
-				<div class="card-header">
-					<h3>Settings</h3>
+<div class="fb-dashboard">
+	<div class="container">
+		<!-- Header -->
+		<div class="header-section">
+			<div class="d-flex justify-content-between align-items-center">
+				<div class="d-flex align-items-center">
+					<div class="fb-icon">
+						<i class="fab fa-facebook-f"></i>
+					</div>
+					<div class="ml-3">
+						<h2 class="mb-0">Facebook Integration</h2>
+						<p class="text-muted mb-0">Manage messages, leads & campaigns</p>
+					</div>
 				</div>
-				<div class="card-body">
-					{% if settings %}
-						<div class="row">
-							<div class="col-md-6">
-								<p><strong>Page ID:</strong> {{ settings.page_id or "Not set" }}</p>
-								<p><strong>Page Name:</strong> {{ settings.page_name or "Not set" }}</p>
-								<p><strong>Status:</strong> 
-									{% if settings.enabled %}
-										<span class="badge badge-success">Enabled</span>
-									{% else %}
-										<span class="badge badge-secondary">Disabled</span>
-									{% endif %}
-								</p>
+				{% if settings and settings.enabled %}
+					<button class="btn btn-primary" onclick="syncNow()">
+						<i class="fas fa-sync"></i> Sync Now
+					</button>
+				{% endif %}
+			</div>
+		</div>
+
+		<!-- Stats -->
+		<div class="stats-grid">
+			<div class="stat-box blue">
+				<div class="stat-number">{{ stats.total_messages or 0 }}</div>
+				<div class="stat-label">Total Messages</div>
+				<i class="fas fa-comments stat-icon"></i>
+			</div>
+			<div class="stat-box green">
+				<div class="stat-number">{{ stats.total_leads or 0 }}</div>
+				<div class="stat-label">Total Leads</div>
+				<i class="fas fa-user-plus stat-icon"></i>
+			</div>
+			<div class="stat-box orange">
+				<div class="stat-number">{{ stats.unmapped_leads or 0 }}</div>
+				<div class="stat-label">Unmapped Leads</div>
+				<i class="fas fa-exclamation-triangle stat-icon"></i>
+			</div>
+			<div class="stat-box purple">
+				<div class="stat-number">{{ stats.today_messages or 0 }}</div>
+				<div class="stat-label">Today's Messages</div>
+				<i class="fas fa-calendar-day stat-icon"></i>
+			</div>
+		</div>
+
+		<div class="row">
+			<!-- Left Column -->
+			<div class="col-md-4">
+				<!-- Configuration -->
+				<div class="card">
+					<div class="card-header">
+						<h5><i class="fas fa-cog"></i> Configuration</h5>
+						{% if settings %}
+							<span class="badge badge-{{ 'success' if settings.enabled else 'secondary' }}">
+								{{ 'Active' if settings.enabled else 'Inactive' }}
+							</span>
+						{% endif %}
+					</div>
+					<div class="card-body">
+						{% if settings %}
+							<div class="config-info">
+								<div class="info-item">
+									<strong>Page:</strong> {{ settings.page_name or "Not set" }}
+								</div>
+								<div class="info-item">
+									<strong>Page ID:</strong> {{ settings.page_id or "Not set" }}
+								</div>
+								<div class="info-item">
+									<strong>Last Synced:</strong> {{ settings.last_synced or "Never" }}
+								</div>
 							</div>
-							<div class="col-md-6">
-								<p><strong>Webhook URL:</strong></p>
-								<code>{{ settings.webhook_url or "Not generated" }}</code>
-								<p><strong>Last Synced:</strong> {{ settings.last_synced or "Never" }}</p>
+							<div class="webhook-section">
+								<label>Webhook URL:</label>
+								<div class="input-group">
+									<input type="text" class="form-control" value="{{ settings.webhook_url or 'Not generated' }}" readonly>
+									<div class="input-group-append">
+										<button class="btn btn-outline-secondary" onclick="copyWebhook()">
+											<i class="fas fa-copy"></i>
+										</button>
+									</div>
+								</div>
 							</div>
+							<div class="mt-3">
+								<a href="/app/facebook-settings" class="btn btn-primary btn-sm">Configure</a>
+								<button onclick="testConnection()" class="btn btn-outline-primary btn-sm ml-2">Test</button>
+							</div>
+						{% else %}
+							<div class="text-center py-3">
+								<i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
+								<h6>Not Configured</h6>
+								<p class="text-muted">Set up your Facebook credentials</p>
+								<a href="/app/facebook-settings" class="btn btn-primary">Setup Now</a>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+
+				<!-- Quick Actions -->
+				<div class="card">
+					<div class="card-header">
+						<h5><i class="fas fa-bolt"></i> Quick Actions</h5>
+					</div>
+					<div class="card-body">
+						<div class="quick-actions">
+							<a href="/app/facebook-message-log" class="action-btn">
+								<i class="fas fa-comments"></i> Messages
+							</a>
+							<a href="/app/facebook-lead-log" class="action-btn">
+								<i class="fas fa-users"></i> Leads
+							</a>
+							<a href="/app/facebook-campaign-metric" class="action-btn">
+								<i class="fas fa-chart-line"></i> Metrics
+							</a>
+							<button onclick="pullLeads()" class="action-btn">
+								<i class="fas fa-download"></i> Pull Leads
+							</button>
 						</div>
-						<a href="/app/facebook-settings" class="btn btn-primary">Configure Settings</a>
-					{% else %}
-						<p>Facebook integration is not configured yet.</p>
-						<a href="/app/facebook-settings" class="btn btn-primary">Setup Integration</a>
-					{% endif %}
+					</div>
 				</div>
 			</div>
-			
-			<!-- Recent Messages Section -->
-			<div class="card mb-4">
-				<div class="card-header">
-					<h3>Recent Messages</h3>
+
+			<!-- Right Column -->
+			<div class="col-md-8">
+				<!-- Recent Messages -->
+				<div class="card">
+					<div class="card-header d-flex justify-content-between">
+						<h5><i class="fas fa-comments"></i> Recent Messages</h5>
+						<button onclick="refreshMessages()" class="btn btn-sm btn-outline-primary">
+							<i class="fas fa-refresh"></i>
+						</button>
+					</div>
+					<div class="card-body">
+						{% if recent_messages %}
+							<div class="messages-list">
+								{% for message in recent_messages %}
+								<div class="message-item">
+									<div class="message-info">
+										<div class="sender">{{ message.sender_name or "Unknown" }}</div>
+										<div class="content">{{ message.content[:50] }}{% if message.content|length > 50 %}...{% endif %}</div>
+									</div>
+									<div class="message-meta">
+										<span class="badge badge-{{ 'info' if message.direction == 'incoming' else 'success' }}">
+											{{ 'In' if message.direction == 'incoming' else 'Out' }}
+										</span>
+										<small class="text-muted">{{ message.received_at or message.sent_at }}</small>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+							<div class="text-center mt-3">
+								<a href="/app/facebook-message-log" class="btn btn-outline-primary">View All</a>
+							</div>
+						{% else %}
+							<div class="text-center py-4">
+								<i class="fas fa-comment-slash fa-2x text-muted mb-2"></i>
+								<p class="text-muted">No messages found</p>
+							</div>
+						{% endif %}
+					</div>
 				</div>
-				<div class="card-body">
-					{% if recent_messages %}
-						<div class="table-responsive">
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th>Sender</th>
-										<th>Content</th>
-										<th>Direction</th>
-										<th>Status</th>
-										<th>Time</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for message in recent_messages %}
-									<tr>
-										<td>{{ message.sender_name or "Unknown" }}</td>
-										<td>{{ message.content[:50] }}{% if message.content|length > 50 %}...{% endif %}</td>
-										<td>
-											{% if message.direction == "incoming" %}
-												<span class="badge badge-info">Incoming</span>
-											{% else %}
-												<span class="badge badge-success">Outgoing</span>
-											{% endif %}
-										</td>
-										<td>{{ message.status }}</td>
-										<td>{{ message.received_at or message.sent_at }}</td>
-									</tr>
-									{% endfor %}
-								</tbody>
-							</table>
-						</div>
-						<a href="/app/facebook-message-log" class="btn btn-outline-primary">View All Messages</a>
-					{% else %}
-						<p>No messages found.</p>
-					{% endif %}
-				</div>
-			</div>
-			
-			<!-- Unmapped Leads Section -->
-			<div class="card mb-4">
-				<div class="card-header">
-					<h3>Unmapped Leads</h3>
-				</div>
-				<div class="card-body">
-					{% if unmapped_leads %}
-						<div class="table-responsive">
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th>Lead ID</th>
-										<th>Created At</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for lead in unmapped_leads %}
-									<tr>
-										<td>{{ lead.fb_leadgen_id }}</td>
-										<td>{{ lead.created_at }}</td>
-										<td>
-											<a href="/app/facebook-lead-log/{{ lead.name }}" class="btn btn-sm btn-primary">Map Lead</a>
-										</td>
-									</tr>
-									{% endfor %}
-								</tbody>
-							</table>
-						</div>
-						<a href="/app/facebook-lead-log" class="btn btn-outline-primary">View All Leads</a>
-					{% else %}
-						<p>No unmapped leads found.</p>
-					{% endif %}
+
+				<!-- Unmapped Leads -->
+				<div class="card">
+					<div class="card-header">
+						<h5><i class="fas fa-user-plus"></i> Unmapped Leads</h5>
+						{% if unmapped_leads %}
+							<span class="badge badge-warning">{{ unmapped_leads|length }}</span>
+						{% endif %}
+					</div>
+					<div class="card-body">
+						{% if unmapped_leads %}
+							<div class="leads-list">
+								{% for lead in unmapped_leads %}
+								<div class="lead-item">
+									<div class="lead-info">
+										<div class="lead-id">{{ lead.fb_leadgen_id }}</div>
+										<small class="text-muted">{{ lead.created_at }}</small>
+									</div>
+									<a href="/app/facebook-lead-log/{{ lead.name }}" class="btn btn-sm btn-primary">Map</a>
+								</div>
+								{% endfor %}
+							</div>
+							<div class="text-center mt-3">
+								<a href="/app/facebook-lead-log" class="btn btn-outline-primary">View All</a>
+								<button onclick="mapAllLeads()" class="btn btn-success ml-2">Auto Map</button>
+							</div>
+						{% else %}
+							<div class="text-center py-4">
+								<i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+								<p class="text-success">All leads are mapped!</p>
+							</div>
+						{% endif %}
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<script>
+function copyWebhook() {
+	const input = document.querySelector('input[readonly]');
+	input.select();
+	document.execCommand('copy');
+	alert('Webhook URL copied!');
+}
+
+function syncNow() {
+	frappe.call({
+		method: 'facebook_integration.api.insights.sync_campaign_insights',
+		callback: function(r) {
+			if (r.message) {
+				alert('Sync completed!');
+				location.reload();
+			}
+		}
+	});
+}
+
+function testConnection() {
+	frappe.call({
+		method: 'facebook_integration.api.dashboard.test_connection',
+		callback: function(r) {
+			if (r.message && r.message.success) {
+				alert('Connection successful!');
+			} else {
+				alert('Connection failed!');
+			}
+		}
+	});
+}
+
+function refreshMessages() {
+	location.reload();
+}
+
+function pullLeads() {
+	frappe.call({
+		method: 'facebook_integration.api.leads.fetch_leads',
+		callback: function(r) {
+			if (r.message) {
+				alert('Leads pulled successfully!');
+				location.reload();
+			}
+		}
+	});
+}
+
+function mapAllLeads() {
+	frappe.call({
+		method: 'facebook_integration.api.dashboard.auto_map_leads',
+		callback: function(r) {
+			if (r.message) {
+				alert('Auto mapping completed!');
+				location.reload();
+			}
+		}
+	});
+}
+</script>
+
+<style>
+.fb-dashboard {
+	background: #f8f9fa;
+	min-height: 100vh;
+	padding: 2rem 0;
+}
+
+.header-section {
+	background: white;
+	padding: 2rem;
+	border-radius: 12px;
+	box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+	margin-bottom: 2rem;
+}
+
+.fb-icon {
+	width: 50px;
+	height: 50px;
+	background: #1877f2;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 20px;
+}
+
+.stats-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 1.5rem;
+	margin-bottom: 2rem;
+}
+
+.stat-box {
+	background: white;
+	padding: 2rem;
+	border-radius: 12px;
+	box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+	position: relative;
+	overflow: hidden;
+}
+
+.stat-box::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 4px;
+}
+
+.stat-box.blue::before { background: #007bff; }
+.stat-box.green::before { background: #28a745; }
+.stat-box.orange::before { background: #fd7e14; }
+.stat-box.purple::before { background: #6f42c1; }
+
+.stat-number {
+	font-size: 2.5rem;
+	font-weight: bold;
+	color: #2c3e50;
+	margin-bottom: 0.5rem;
+}
+
+.stat-label {
+	color: #6c757d;
+	font-weight: 500;
+}
+
+.stat-icon {
+	position: absolute;
+	right: 1.5rem;
+	top: 1.5rem;
+	font-size: 2rem;
+	opacity: 0.1;
+}
+
+.card {
+	border: none;
+	border-radius: 12px;
+	box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+	margin-bottom: 2rem;
+}
+
+.card-header {
+	background: #f8f9fa;
+	border-bottom: 1px solid #dee2e6;
+	padding: 1.5rem;
+	display: flex;
+	justify-content: between;
+	align-items: center;
+}
+
+.card-header h5 {
+	margin: 0;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.card-body {
+	padding: 1.5rem;
+}
+
+.config-info {
+	margin-bottom: 1.5rem;
+}
+
+.info-item {
+	margin-bottom: 0.75rem;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid #f1f3f4;
+}
+
+.info-item:last-child {
+	border-bottom: none;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.webhook-section {
+	margin-bottom: 1.5rem;
+}
+
+.webhook-section label {
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+	display: block;
+}
+
+.quick-actions {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 1rem;
+}
+
+.action-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 1rem;
+	border: 2px solid #e9ecef;
+	border-radius: 8px;
+	text-decoration: none;
+	color: #495057;
+	font-weight: 500;
+	transition: all 0.3s;
+	background: none;
+	cursor: pointer;
+}
+
+.action-btn:hover {
+	border-color: #007bff;
+	color: #007bff;
+	text-decoration: none;
+}
+
+.messages-list, .leads-list {
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.message-item, .lead-item {
+	display: flex;
+	justify-content: between;
+	align-items: center;
+	padding: 1rem;
+	border: 1px solid #e9ecef;
+	border-radius: 8px;
+	margin-bottom: 0.75rem;
+}
+
+.message-item:last-child, .lead-item:last-child {
+	margin-bottom: 0;
+}
+
+.message-info, .lead-info {
+	flex: 1;
+}
+
+.sender, .lead-id {
+	font-weight: 600;
+	margin-bottom: 0.25rem;
+}
+
+.content {
+	color: #6c757d;
+	font-size: 0.9rem;
+}
+
+.message-meta {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 0.25rem;
+}
+
+@media (max-width: 768px) {
+	.stats-grid {
+		grid-template-columns: 1fr;
+	}
+	
+	.quick-actions {
+		grid-template-columns: 1fr;
+	}
+	
+	.message-item, .lead-item {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1rem;
+	}
+	
+	.message-meta {
+		align-items: flex-start;
+		flex-direction: row;
+		width: 100%;
+		justify-content: between;
+	}
+}
+</style>
 {% endblock %}
