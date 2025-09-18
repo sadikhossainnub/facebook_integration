@@ -1,29 +1,34 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2024-01-01 00:00:00.000000",
+ "creation": "2024-01-01 00:00:00",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "enabled",
+  "section_break_ikky",
   "page_id",
-  "page_name",
   "app_id",
   "app_secret",
+  "column_break_mecx",
+  "page_name",
   "access_token",
   "verify_token",
-  "webhook_url",
-  "enabled",
+  "section_break_hnxm",
   "default_lead_owner",
+  "section_break_ptni",
+  "webhook_url",
+  "column_break_wqdw",
   "last_synced"
  ],
  "fields": [
   {
    "fieldname": "page_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Page ID",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   },
   {
    "fieldname": "page_name",
@@ -33,18 +38,21 @@
   {
    "fieldname": "app_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "App ID",
    "reqd": 1
   },
   {
    "fieldname": "app_secret",
    "fieldtype": "Password",
+   "in_list_view": 1,
    "label": "App Secret",
    "reqd": 1
   },
   {
    "fieldname": "access_token",
    "fieldtype": "Password",
+   "in_list_view": 1,
    "label": "Access Token",
    "reqd": 1
   },
@@ -77,12 +85,32 @@
    "fieldtype": "Datetime",
    "label": "Last Synced",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_ikky",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_mecx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_hnxm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_ptni",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_wqdw",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-01-01 00:00:00.000000",
+ "modified": "2025-09-18 08:01:09.786398",
  "modified_by": "Administrator",
  "module": "Facebook Integration",
  "name": "Facebook Settings",
@@ -99,6 +127,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

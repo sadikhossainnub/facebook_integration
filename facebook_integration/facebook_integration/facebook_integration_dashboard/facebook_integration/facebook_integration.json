@@ -1,0 +1,29 @@
+{
+ "cards": [],
+ "charts": [
+  {
+   "chart": "Campaign Performance",
+   "width": "Full"
+  },
+  {
+   "chart": "Facebook Leads",
+   "width": "Full"
+  },
+  {
+   "chart": "Facebook Messages",
+   "width": "Full"
+  }
+ ],
+ "creation": "2025-09-18 07:50:12.008480",
+ "dashboard_name": "Facebook Integration",
+ "docstatus": 0,
+ "doctype": "Dashboard",
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "modified": "2025-09-18 07:50:12.008480",
+ "modified_by": "Administrator",
+ "module": "Facebook Integration",
+ "name": "Facebook Integration",
+ "owner": "Administrator"
+}

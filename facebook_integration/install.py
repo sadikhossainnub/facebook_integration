@@ -115,16 +115,32 @@ def create_workspace_and_dashboard():
 	
 	# Create basic dashboard charts
 	try:
+		# Facebook Messages Chart (timeseries)
 		if not frappe.db.exists("Dashboard Chart", "Facebook Messages"):
 			chart = frappe.get_doc({
 				"doctype": "Dashboard Chart",
 				"chart_name": "Facebook Messages",
 				"chart_type": "Line",
 				"document_type": "Facebook Message Log",
-				"group_by_based_on": "creation",
+				"based_on": "creation",
 				"group_by_type": "Count",
 				"time_interval": "Daily",
 				"timeseries": 1,
+				"is_public": 1,
+				"module": "Facebook Integration"
+			})
+			chart.insert(ignore_permissions=True)
+		
+		# Facebook Leads Chart (non-timeseries)
+		if not frappe.db.exists("Dashboard Chart", "Facebook Leads"):
+			chart = frappe.get_doc({
+				"doctype": "Dashboard Chart",
+				"chart_name": "Facebook Leads",
+				"chart_type": "Donut",
+				"document_type": "Facebook Lead Log",
+				"group_by_based_on": "synced",
+				"group_by_type": "Count",
+				"timeseries": 0,
 				"is_public": 1,
 				"module": "Facebook Integration"
 			})

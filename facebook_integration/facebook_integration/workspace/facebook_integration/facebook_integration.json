@@ -1,0 +1,79 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"NifrcqbG7W\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Facebook Integration</span>\",\"col\":12}},{\"id\":\"eVG6AU5R6w\",\"type\":\"card\",\"data\":{\"card_name\":\"Facebook Integration\",\"col\":4}}]",
+ "creation": "2025-09-18 07:43:14.481105",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "integration",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Facebook Integration",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Facebook Integration",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Facebook Settings",
+   "link_count": 0,
+   "link_to": "Facebook Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Facebook Campaign Metric",
+   "link_count": 0,
+   "link_to": "Facebook Campaign Metric",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Facebook Lead Log",
+   "link_count": 0,
+   "link_to": "Facebook Lead Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Facebook Message Log",
+   "link_count": 0,
+   "link_to": "Facebook Message Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2025-09-18 08:12:14.927414",
+ "modified_by": "Administrator",
+ "module": "Facebook Integration",
+ "name": "Facebook Integration",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "ERPNext Integrations",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 25.0,
+ "shortcuts": [],
+ "title": "Facebook Integration"
+}

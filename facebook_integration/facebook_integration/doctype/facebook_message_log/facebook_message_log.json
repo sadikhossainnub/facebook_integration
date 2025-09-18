@@ -2,26 +2,28 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:",
- "creation": "2024-01-01 00:00:00.000000",
+ "creation": "2024-01-01 00:00:00",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "message_id",
-  "sender_id",
-  "sender_name",
   "sender_phone",
   "recipient_id",
-  "content",
   "message_type",
   "media_url",
   "direction",
+  "received_at",
+  "column_break_jqay",
   "status",
+  "message_id",
+  "sender_id",
+  "sender_name",
   "linked_lead",
   "linked_issue",
-  "received_at",
-  "sent_at"
+  "sent_at",
+  "section_break_ccwo",
+  "content"
  ],
  "fields": [
   {
@@ -106,11 +108,19 @@
    "fieldname": "sent_at",
    "fieldtype": "Datetime",
    "label": "Sent At"
+  },
+  {
+   "fieldname": "column_break_jqay",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_ccwo",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-01 00:00:00.000000",
+ "modified": "2025-09-18 08:04:58.373332",
  "modified_by": "Administrator",
  "module": "Facebook Integration",
  "name": "Facebook Message Log",
@@ -127,6 +137,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
