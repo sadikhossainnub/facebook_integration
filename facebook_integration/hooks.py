@@ -83,7 +83,7 @@ app_license = "mit"
 # ------------
 
 # before_install = "facebook_integration.install.before_install"
-# after_install = "facebook_integration.install.after_install"
+after_install = "facebook_integration.install.after_install"
 
 # Uninstallation
 # ------------
@@ -148,23 +148,19 @@ app_license = "mit"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"facebook_integration.tasks.all"
-# 	],
-# 	"daily": [
-# 		"facebook_integration.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"facebook_integration.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"facebook_integration.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"facebook_integration.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"daily": [
+		"facebook_integration.tasks.sync_insights"
+	],
+	"cron": {
+		"*/5 * * * *": [
+			"facebook_integration.tasks.fetch_leads"
+		],
+		"0 2 * * 0": [
+			"facebook_integration.tasks.cleanup_old_logs"
+		]
+	}
+}
 
 # Testing
 # -------

@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "fb_leadgen_id",
+  "page_id",
+  "form_id",
+  "data",
+  "mapped_document",
+  "mapped_to",
+  "created_at",
+  "synced"
+ ],
+ "fields": [
+  {
+   "default": "FB-LEAD-.YYYY.-.MM.-.DD.-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "FB-LEAD-.YYYY.-.MM.-.DD.-"
+  },
+  {
+   "fieldname": "fb_leadgen_id",
+   "fieldtype": "Data",
+   "label": "FB Leadgen ID",
+   "unique": 1
+  },
+  {
+   "fieldname": "page_id",
+   "fieldtype": "Data",
+   "label": "Page ID"
+  },
+  {
+   "fieldname": "form_id",
+   "fieldtype": "Data",
+   "label": "Form ID"
+  },
+  {
+   "fieldname": "data",
+   "fieldtype": "Text",
+   "label": "Raw JSON Data"
+  },
+  {
+   "fieldname": "mapped_document",
+   "fieldtype": "Dynamic Link",
+   "label": "Mapped Document",
+   "options": "mapped_to"
+  },
+  {
+   "fieldname": "mapped_to",
+   "fieldtype": "Select",
+   "label": "Mapped To",
+   "options": "Lead\nContact\nCustomer"
+  },
+  {
+   "fieldname": "created_at",
+   "fieldtype": "Datetime",
+   "label": "Created At"
+  },
+  {
+   "default": "0",
+   "fieldname": "synced",
+   "fieldtype": "Check",
+   "label": "Synced"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Facebook Integration",
+ "name": "Facebook Lead Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
