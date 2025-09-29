@@ -1,96 +1,99 @@
 import frappe
 from datetime import datetime, timedelta
-from facebook_integration.api.insights import pull_insights
-from facebook_integration.api.leads import fetch_lead_from_facebook
+from facebook_integration.api.insights import sync_campaign_insights
+from facebook_integration.api.leads import fetch_leads as api_fetch_leads
+from facebook_integration.api.shop import sync_products, sync_inventory
 
 def sync_insights():
-	"""Daily task to sync Facebook insights"""
+	"""Daily task to sync Facebook campaign insights"""
 	try:
-		settings = frappe.get_single("Facebook Settings")
+		accounts = frappe.get_all("Facebook Account", 
+			filters={"enabled": 1, "enable_ads": 1},
+			fields=["name"])
 		
-		if not settings.enabled:
-			return
-		
-		# Pull insights for yesterday
-		yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-		
-		frappe.logger().info(f"Starting Facebook insights sync for {yesterday}")
-		
-		result = pull_insights(since=yesterday, until=yesterday)
-		
-		frappe.logger().info(f"Facebook insights sync completed: {result}")
-		
-	except Exception as e:
-		frappe.log_error(f"Facebook insights sync failed: {str(e)}")
-
-def fetch_leads():
-	"""Periodic task to fetch pending leads"""
-	try:
-		settings = frappe.get_single("Facebook Settings")
-		
-		if not settings.enabled:
-			return
-		
-		# Get unprocessed leads
-		pending_leads = frappe.get_list(
-			"Facebook Lead Log",
-			filters={"synced": 0},
-			fields=["name", "fb_leadgen_id"],
-			limit=10
-		)
-		
-		for lead in pending_leads:
+		for account in accounts:
 			try:
-				# Fetch lead data from Facebook
-				lead_data = fetch_lead_from_facebook(lead["fb_leadgen_id"])
-				
-				if lead_data:
-					# Update lead log with fetched data
-					lead_doc = frappe.get_doc("Facebook Lead Log", lead["name"])
-					lead_doc.data = frappe.as_json(lead_data)
-					lead_doc.save(ignore_permissions=True)
-					
-					frappe.logger().info(f"Updated lead data for {lead['fb_leadgen_id']}")
-				
+				sync_campaign_insights(account.name)
+				frappe.logger().info(f"Synced insights for account: {account.name}")
 			except Exception as e:
-				frappe.log_error(f"Failed to fetch lead {lead['fb_leadgen_id']}: {str(e)}")
+				frappe.log_error(f"Insights sync failed for {account.name}: {str(e)}")
 		
 		frappe.db.commit()
 		
 	except Exception as e:
-		frappe.log_error(f"Facebook leads fetch failed: {str(e)}")
+		frappe.log_error(f"Facebook insights sync task failed: {str(e)}")
+
+def fetch_leads():
+	"""Periodic task to fetch Facebook leads"""
+	try:
+		accounts = frappe.get_all("Facebook Account", 
+			filters={"enabled": 1, "enable_leads": 1},
+			fields=["name"])
+		
+		for account in accounts:
+			try:
+				result = api_fetch_leads(account.name, limit=25)
+				frappe.logger().info(f"Fetched leads for {account.name}: {result}")
+			except Exception as e:
+				frappe.log_error(f"Lead fetch failed for {account.name}: {str(e)}")
+		
+		frappe.db.commit()
+		
+	except Exception as e:
+		frappe.log_error(f"Facebook lead fetch task failed: {str(e)}")
+
+def sync_shop_data():
+	"""Sync Facebook Shop products and inventory"""
+	try:
+		accounts = frappe.get_all("Facebook Account", 
+			filters={"enabled": 1, "enable_shop": 1},
+			fields=["name"])
+		
+		for account in accounts:
+			try:
+				sync_products(account.name)
+				sync_inventory(account.name)
+				frappe.logger().info(f"Synced shop data for account: {account.name}")
+			except Exception as e:
+				frappe.log_error(f"Shop sync failed for {account.name}: {str(e)}")
+		
+		frappe.db.commit()
+		
+	except Exception as e:
+		frappe.log_error(f"Facebook shop sync task failed: {str(e)}")
 
 def cleanup_old_logs():
 	"""Weekly task to cleanup old logs"""
 	try:
-		# Delete message logs older than 90 days
-		cutoff_date = datetime.now() - timedelta(days=90)
+		# Delete logs older than 90 days
+		cutoff_date = frappe.utils.add_days(frappe.utils.nowdate(), -90)
 		
-		old_messages = frappe.get_list(
-			"Facebook Message Log",
+		# Cleanup message logs
+		old_messages = frappe.db.get_list("Facebook Message Log",
 			filters={"creation": ["<", cutoff_date]},
-			pluck="name"
-		)
+			pluck="name")
 		
 		for message_name in old_messages:
 			frappe.delete_doc("Facebook Message Log", message_name, ignore_permissions=True)
 		
-		frappe.logger().info(f"Cleaned up {len(old_messages)} old Facebook message logs")
+		# Cleanup synced lead logs
+		old_leads = frappe.db.get_list("Facebook Lead Log",
+			filters={"creation": ["<", cutoff_date], "synced": 1},
+			pluck="name")
 		
-		# Delete campaign metrics older than 1 year
-		old_cutoff = datetime.now() - timedelta(days=365)
+		for lead_name in old_leads:
+			frappe.delete_doc("Facebook Lead Log", lead_name, ignore_permissions=True)
 		
-		old_metrics = frappe.get_list(
-			"Facebook Campaign Metric",
-			filters={"date": ["<", old_cutoff.strftime("%Y-%m-%d")]},
-			pluck="name"
-		)
+		# Cleanup old campaign metrics (keep 1 year)
+		old_cutoff = frappe.utils.add_days(frappe.utils.nowdate(), -365)
+		old_metrics = frappe.db.get_list("Facebook Campaign Metric",
+			filters={"date": ["<", old_cutoff]},
+			pluck="name")
 		
 		for metric_name in old_metrics:
 			frappe.delete_doc("Facebook Campaign Metric", metric_name, ignore_permissions=True)
 		
-		frappe.logger().info(f"Cleaned up {len(old_metrics)} old Facebook campaign metrics")
-		
+		frappe.logger().info(f"Cleaned up {len(old_messages)} messages, {len(old_leads)} leads, {len(old_metrics)} metrics")
 		frappe.db.commit()
 		
 	except Exception as e:

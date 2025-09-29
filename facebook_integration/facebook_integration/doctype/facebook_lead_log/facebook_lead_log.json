@@ -10,6 +10,7 @@
   "synced",
   "section_break_wweb",
   "naming_series",
+  "facebook_account",
   "page_id",
   "mapped_to",
   "created_at",
@@ -17,6 +18,15 @@
   "fb_leadgen_id",
   "form_id",
   "mapped_document",
+  "section_break_lead_data",
+  "full_name",
+  "email",
+  "phone",
+  "company_name",
+  "column_break_lead",
+  "lead",
+  "contact",
+  "customer",
   "section_break_oryx",
   "data"
  ],
@@ -33,6 +43,14 @@
    "fieldtype": "Data",
    "label": "FB Leadgen ID",
    "unique": 1
+  },
+  {
+   "fieldname": "facebook_account",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Facebook Account",
+   "options": "Facebook Account",
+   "reqd": 1
   },
   {
    "fieldname": "page_id",
@@ -78,6 +96,53 @@
   },
   {
    "fieldname": "column_break_ertn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name"
+  },
+  {
+   "fieldname": "lead",
+   "fieldtype": "Link",
+   "label": "Lead",
+   "options": "Lead"
+  },
+  {
+   "fieldname": "contact",
+   "fieldtype": "Link",
+   "label": "Contact",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "section_break_lead_data",
+   "fieldtype": "Section Break",
+   "label": "Lead Data"
+  },
+  {
+   "fieldname": "column_break_lead",
    "fieldtype": "Column Break"
   },
   {

@@ -1,30 +1,25 @@
 import frappe
 
 def after_install():
-	"""Setup Facebook Integration after installation"""
-	
-	# Create custom roles
-	create_facebook_roles()
-	
-	# Setup default permissions
+	"""Setup after app installation"""
+	create_custom_roles()
+	create_item_group()
 	setup_permissions()
-	
-	# Create workspace and dashboard
-	create_workspace_and_dashboard()
-	
-	frappe.db.commit()
 
-def create_facebook_roles():
-	"""Create Facebook Integration specific roles"""
-	
+def create_custom_roles():
+	"""Create Facebook-specific roles"""
 	roles = [
 		{
 			"role_name": "Facebook Admin",
-			"description": "Full access to Facebook Integration settings and data"
+			"description": "Full access to Facebook Integration features"
 		},
 		{
 			"role_name": "Facebook Agent", 
-			"description": "Access to Facebook messages and lead mapping"
+			"description": "Handle Facebook messages and leads"
+		},
+		{
+			"role_name": "Facebook Manager",
+			"description": "View Facebook reports and analytics"
 		}
 	]
 	
@@ -35,115 +30,46 @@ def create_facebook_roles():
 			role.description = role_data["description"]
 			role.insert(ignore_permissions=True)
 
+def create_item_group():
+	"""Create Facebook Products item group"""
+	if not frappe.db.exists("Item Group", "Facebook Products"):
+		item_group = frappe.new_doc("Item Group")
+		item_group.item_group_name = "Facebook Products"
+		item_group.parent_item_group = "All Item Groups"
+		item_group.is_group = 0
+		item_group.insert(ignore_permissions=True)
+
 def setup_permissions():
-	"""Setup default permissions for Facebook Integration doctypes"""
-	
-	# Facebook Admin permissions
-	admin_permissions = [
-		{
-			"doctype": "Facebook Settings",
-			"role": "Facebook Admin",
-			"perms": {"read": 1, "write": 1, "create": 1, "delete": 1}
-		},
-		{
-			"doctype": "Facebook Message Log", 
-			"role": "Facebook Admin",
-			"perms": {"read": 1, "write": 1, "create": 1, "delete": 1}
-		},
-		{
-			"doctype": "Facebook Lead Log",
-			"role": "Facebook Admin", 
-			"perms": {"read": 1, "write": 1, "create": 1, "delete": 1}
-		},
-		{
-			"doctype": "Facebook Campaign Metric",
-			"role": "Facebook Admin",
-			"perms": {"read": 1, "write": 1, "create": 1, "delete": 1}
-		}
-	]
-	
+	"""Setup role-based permissions"""
 	# Facebook Agent permissions
 	agent_permissions = [
-		{
-			"doctype": "Facebook Message Log",
-			"role": "Facebook Agent", 
-			"perms": {"read": 1, "write": 1, "create": 1}
-		},
-		{
-			"doctype": "Facebook Lead Log",
-			"role": "Facebook Agent",
-			"perms": {"read": 1, "write": 1}
-		}
+		{"doctype": "Facebook Message Log", "role": "Facebook Agent", "read": 1, "write": 1, "create": 1},
+		{"doctype": "Facebook Lead Log", "role": "Facebook Agent", "read": 1, "write": 1},
+		{"doctype": "Lead", "role": "Facebook Agent", "read": 1, "write": 1, "create": 1},
+		{"doctype": "Contact", "role": "Facebook Agent", "read": 1, "write": 1, "create": 1},
+		{"doctype": "Communication", "role": "Facebook Agent", "read": 1, "write": 1, "create": 1}
 	]
 	
-	all_permissions = admin_permissions + agent_permissions
+	# Facebook Manager permissions  
+	manager_permissions = [
+		{"doctype": "Facebook Campaign Metric", "role": "Facebook Manager", "read": 1},
+		{"doctype": "Facebook Shop Order", "role": "Facebook Manager", "read": 1},
+		{"doctype": "Facebook Account", "role": "Facebook Manager", "read": 1}
+	]
 	
-	for perm_data in all_permissions:
-		# Check if permission already exists
-		existing = frappe.db.exists("Custom DocPerm", {
-			"parent": perm_data["doctype"],
-			"role": perm_data["role"]
-		})
-		
-		if not existing:
-			perm = frappe.new_doc("Custom DocPerm")
-			perm.parent = perm_data["doctype"]
-			perm.parenttype = "DocType"
-			perm.parentfield = "permissions"
-			perm.role = perm_data["role"]
-			
-			for perm_type, value in perm_data["perms"].items():
-				setattr(perm, perm_type, value)
-			
-			perm.insert(ignore_permissions=True)
-
-def create_workspace_and_dashboard():
-	"""Create Facebook Integration workspace and dashboard charts"""
+	all_permissions = agent_permissions + manager_permissions
 	
-	# Create workspace if it doesn't exist
-	if not frappe.db.exists("Workspace", "Facebook Integration"):
-		workspace = frappe.get_doc({
-			"doctype": "Workspace",
-			"label": "Facebook Integration",
-			"title": "Facebook Integration",
-			"icon": "facebook",
-			"module": "Facebook Integration",
-			"is_standard": 1,
-			"public": 1
-		})
-		workspace.insert(ignore_permissions=True)
-	
-	# Create basic dashboard charts
-	try:
-		# Facebook Messages Chart (timeseries)
-		if not frappe.db.exists("Dashboard Chart", "Facebook Messages"):
-			chart = frappe.get_doc({
-				"doctype": "Dashboard Chart",
-				"chart_name": "Facebook Messages",
-				"chart_type": "Line",
-				"document_type": "Facebook Message Log",
-				"based_on": "creation",
-				"group_by_type": "Count",
-				"time_interval": "Daily",
-				"timeseries": 1,
-				"is_public": 1,
-				"module": "Facebook Integration"
-			})
-			chart.insert(ignore_permissions=True)
-		
-		# Facebook Leads Chart (non-timeseries)
-		if not frappe.db.exists("Dashboard Chart", "Facebook Leads"):
-			chart = frappe.get_doc({
-				"doctype": "Dashboard Chart",
-				"chart_name": "Facebook Leads",
-				"chart_type": "Donut",
-				"document_type": "Facebook Lead Log",
-				"group_by_based_on": "synced",
-				"group_by_type": "Count",
-				"timeseries": 0,
-				"is_public": 1,
-				"module": "Facebook Integration"
-			})
-			chart.insert(ignore_permissions=True)
-	except Exception:
-		pass
+	for perm in all_permissions:
+		if not frappe.db.exists("Custom DocPerm", {
+			"parent": perm["doctype"],
+			"role": perm["role"]
+		}):
+			doc_perm = frappe.new_doc("Custom DocPerm")
+			doc_perm.parent = perm["doctype"]
+			doc_perm.parenttype = "DocType"
+			doc_perm.parentfield = "permissions"
+			doc_perm.role = perm["role"]
+			doc_perm.read = perm.get("read", 0)
+			doc_perm.write = perm.get("write", 0)
+			doc_perm.create = perm.get("create", 0)
+			doc_perm.insert(ignore_permissions=True)

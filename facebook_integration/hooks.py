@@ -156,6 +156,9 @@ scheduler_events = {
 		"*/5 * * * *": [
 			"facebook_integration.tasks.fetch_leads"
 		],
+		"0 1 * * *": [
+			"facebook_integration.tasks.sync_shop_data"
+		],
 		"0 2 * * 0": [
 			"facebook_integration.tasks.cleanup_old_logs"
 		]

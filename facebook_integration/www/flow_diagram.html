@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facebook Integration Flow Diagram</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .flow-section { margin: 30px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .facebook { background: #e3f2fd; border-left: 4px solid #1976d2; }
+        .app { background: #f3e5f5; border-left: 4px solid #7b1fa2; }
+        .erpnext { background: #e8f5e8; border-left: 4px solid #388e3c; }
+        .flow-arrow { text-align: center; font-size: 24px; color: #666; margin: 10px 0; }
+        .component { display: inline-block; margin: 10px; padding: 10px 15px; background: white; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .flow-step { margin: 15px 0; padding: 15px; background: #fff3e0; border-left: 3px solid #ff9800; }
+        .data-flow { font-family: monospace; background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Facebook ⇄ ERPNext Integration Flow</h1>
+        
+        <div class="flow-section facebook">
+            <h2>🔵 Facebook Platform</h2>
+            <div class="component">Lead Ads</div>
+            <div class="component">Messenger</div>
+            <div class="component">Facebook Shop</div>
+            <div class="component">Ads Manager</div>
+            <div class="component">Graph API</div>
+            <div class="component">Marketing API</div>
+        </div>
+
+        <div class="flow-arrow">⬇️</div>
+
+        <div class="flow-section app">
+            <h2>🟣 Facebook Integration App</h2>
+            <div class="component">Facebook Account Config</div>
+            <div class="component">Webhook Listener</div>
+            <div class="component">Sync Scheduler</div>
+            <div class="component">Custom DocTypes</div>
+            <div class="component">API Handlers</div>
+        </div>
+
+        <div class="flow-arrow">⬇️</div>
+
+        <div class="flow-section erpnext">
+            <h2>🟢 ERPNext Core Modules</h2>
+            <div class="component">CRM (Leads)</div>
+            <div class="component">Sales (Orders)</div>
+            <div class="component">Communication</div>
+            <div class="component">Accounts</div>
+            <div class="component">Items</div>
+        </div>
+
+        <h2>📊 Data Flow Steps</h2>
+
+        <div class="flow-step">
+            <h3>1. Lead Ads → ERPNext CRM</h3>
+            <div class="data-flow">
+Customer → Facebook Lead Ad → Webhook → Facebook Lead Log → ERPNext Lead
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <h3>2. Messenger → ERPNext Communication</h3>
+            <div class="data-flow">
+Customer → Facebook Messenger ↔ Webhook ↔ Facebook Message Log ↔ ERPNext Communication
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <h3>3. Facebook Shop → ERPNext Sales</h3>
+            <div class="data-flow">
+Products: Facebook Shop → API Sync → ERPNext Items
+Orders: Facebook Shop → Webhook → Facebook Shop Order → ERPNext Sales Order
+Inventory: ERPNext Stock → API Sync → Facebook Shop
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <h3>4. Ads Manager → ERPNext Marketing</h3>
+            <div class="data-flow">
+Facebook Ads → Marketing API → Facebook Campaign Metric → ERPNext Reports
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <h3>5. Reporting & Analytics</h3>
+            <div class="data-flow">
+Campaign Data + Lead Data + Sales Data → ERPNext Dashboard → ROI Analysis
+            </div>
+        </div>
+
+        <h2>🔄 Real-time vs Scheduled Sync</h2>
+        
+        <div style="display: flex; gap: 20px;">
+            <div style="flex: 1; background: #fff3e0; padding: 15px; border-radius: 5px;">
+                <h3>⚡ Real-time (Webhooks)</h3>
+                <ul>
+                    <li>New Lead Ads</li>
+                    <li>Messenger Messages</li>
+                    <li>Shop Orders</li>
+                </ul>
+            </div>
+            <div style="flex: 1; background: #e8f5e8; padding: 15px; border-radius: 5px;">
+                <h3>⏰ Scheduled (Background Jobs)</h3>
+                <ul>
+                    <li>Campaign Insights (Daily)</li>
+                    <li>Product Sync (Daily)</li>
+                    <li>Inventory Sync (Daily)</li>
+                    <li>Lead Processing (5 min)</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>🔐 Security & Access Control</h2>
+        <div style="background: #ffebee; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <ul>
+                <li><strong>OAuth 2.0:</strong> Secure Facebook API authentication</li>
+                <li><strong>Webhook Verification:</strong> HMAC signature validation</li>
+                <li><strong>Role-based Access:</strong> Facebook Admin, Agent, Manager roles</li>
+                <li><strong>Multi-account Support:</strong> Isolated data per Facebook account</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

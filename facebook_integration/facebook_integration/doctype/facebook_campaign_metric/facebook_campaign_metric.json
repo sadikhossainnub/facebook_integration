@@ -8,13 +8,25 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
+  "facebook_account",
   "campaign_id",
   "campaign_name",
+  "campaign_status",
+  "campaign_objective",
   "date",
+  "column_break_1",
   "spend",
   "impressions",
   "clicks",
+  "reach",
+  "frequency",
+  "section_break_1",
+  "ctr",
+  "cpc",
+  "cpm",
+  "column_break_2",
   "leads",
+  "purchases",
   "conversions",
   "roas"
  ],
@@ -27,9 +39,19 @@
    "options": "FB-CAM-.YYYY.-.MM.-.DD.-"
   },
   {
+   "fieldname": "facebook_account",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Facebook Account",
+   "options": "Facebook Account",
+   "reqd": 1
+  },
+  {
    "fieldname": "campaign_id",
    "fieldtype": "Data",
-   "label": "Campaign ID"
+   "in_list_view": 1,
+   "label": "Campaign ID",
+   "reqd": 1
   },
   {
    "fieldname": "campaign_name",
@@ -67,9 +89,61 @@
    "label": "Conversions"
   },
   {
+   "fieldname": "campaign_status",
+   "fieldtype": "Data",
+   "label": "Campaign Status"
+  },
+  {
+   "fieldname": "campaign_objective",
+   "fieldtype": "Data",
+   "label": "Campaign Objective"
+  },
+  {
+   "fieldname": "reach",
+   "fieldtype": "Int",
+   "label": "Reach"
+  },
+  {
+   "fieldname": "frequency",
+   "fieldtype": "Float",
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "ctr",
+   "fieldtype": "Float",
+   "label": "CTR (%)"
+  },
+  {
+   "fieldname": "cpc",
+   "fieldtype": "Currency",
+   "label": "CPC"
+  },
+  {
+   "fieldname": "cpm",
+   "fieldtype": "Currency",
+   "label": "CPM"
+  },
+  {
+   "fieldname": "purchases",
+   "fieldtype": "Int",
+   "label": "Purchases"
+  },
+  {
    "fieldname": "roas",
    "fieldtype": "Float",
    "label": "ROAS"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,

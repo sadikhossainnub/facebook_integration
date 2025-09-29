@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
+  "facebook_account",
   "sender_phone",
   "recipient_id",
   "message_type",
@@ -32,6 +33,14 @@
    "fieldtype": "Select",
    "label": "Series",
    "options": "FB-MSG-.YYYY.-.MM.-.DD.-"
+  },
+  {
+   "fieldname": "facebook_account",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Facebook Account",
+   "options": "Facebook Account",
+   "reqd": 1
   },
   {
    "fieldname": "message_id",

@@ -13,6 +13,14 @@ def webhook():
 	elif frappe.request.method == "POST":
 		return process_webhook()
 
+@frappe.whitelist(allow_guest=True, methods=["GET", "POST"])
+def handle_webhook():
+	"""Enhanced webhook handler for multi-account support"""
+	if frappe.request.method == "GET":
+		return verify_multi_account_webhook()
+	else:
+		return process_multi_account_webhook()
+
 def verify_webhook():
 	"""Handle Facebook webhook verification challenge"""
 	try:
@@ -151,17 +159,68 @@ def process_leadgen_event(leadgen_data):
 	except Exception as e:
 		frappe.log_error(f"Leadgen processing failed: {str(e)}")
 
+def verify_multi_account_webhook():
+	"""Verify webhook for multi-account setup"""
+	mode = frappe.form_dict.get("hub.mode")
+	token = frappe.form_dict.get("hub.verify_token")
+	challenge = frappe.form_dict.get("hub.challenge")
+	
+	accounts = frappe.get_all("Facebook Account", 
+		filters={"verify_token": token, "enabled": 1})
+	
+	if mode == "subscribe" and accounts:
+		frappe.response["type"] = "text"
+		return challenge
+	else:
+		frappe.throw("Verification failed", frappe.PermissionError)
+
+def process_multi_account_webhook():
+	"""Process webhook for multi-account setup"""
+	try:
+		body = frappe.request.get_data(as_text=True)
+		data = json.loads(body)
+		
+		for entry in data.get("entry", []):
+			page_id = entry.get("id")
+			account = get_account_by_page_id(page_id)
+			
+			if not account:
+				continue
+			
+			for change in entry.get("changes", []):
+				process_account_change(account, change)
+			
+			for messaging in entry.get("messaging", []):
+				process_account_message(account, messaging)
+		
+		return "OK"
+	except Exception as e:
+		frappe.log_error(f"Multi-account webhook error: {str(e)}")
+		return "ERROR"
+
+def get_account_by_page_id(page_id):
+	accounts = frappe.get_all("Facebook Account", 
+		filters={"page_id": page_id, "enabled": 1})
+	return accounts[0].name if accounts else None
+
+def process_account_change(account, change):
+	if change.get("field") == "leadgen":
+		from facebook_integration.api.leads import handle_lead_webhook
+		handle_lead_webhook(account, change.get("value", {}))
+	elif change.get("field") == "orders":
+		from facebook_integration.api.shop import handle_order_webhook
+		handle_order_webhook(account, change.get("value", {}))
+
+def process_account_message(account, messaging):
+	from facebook_integration.api.messaging import handle_message_webhook
+	handle_message_webhook(account, messaging)
+
 def process_lead_data(lead_log_name):
 	"""Background job to process lead data and create Lead/Contact"""
 	try:
 		lead_log = frappe.get_doc("Facebook Lead Log", lead_log_name)
-		
-		# Fetch actual lead data from Facebook API
-		# This would require implementing the Facebook Graph API call
-		# For now, we'll mark it as processed
 		lead_log.synced = 1
 		lead_log.save(ignore_permissions=True)
 		frappe.db.commit()
-		
 	except Exception as e:
 		frappe.log_error(f"Lead data processing failed: {str(e)}")
