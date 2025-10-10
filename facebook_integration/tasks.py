@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from facebook_integration.api.insights import sync_campaign_insights
 from facebook_integration.api.leads import fetch_leads as api_fetch_leads
 from facebook_integration.api.shop import sync_products, sync_inventory
+from facebook_integration.api.messaging import sync_messages as api_sync_messages
 
 def sync_insights():
 	"""Daily task to sync Facebook campaign insights"""
@@ -61,6 +62,25 @@ def sync_shop_data():
 		
 	except Exception as e:
 		frappe.log_error(f"Facebook shop sync task failed: {str(e)}")
+
+def sync_messages():
+	"""Periodic task to sync Facebook messages"""
+	try:
+		accounts = frappe.get_all("Facebook Account", 
+			filters={"enabled": 1, "enable_messenger": 1},
+			fields=["name"])
+		
+		for account in accounts:
+			try:
+				result = api_sync_messages(account.name)
+				frappe.logger().info(f"Synced messages for {account.name}: {result}")
+			except Exception as e:
+				frappe.log_error(f"Message sync failed for {account.name}: {str(e)}")
+		
+		frappe.db.commit()
+		
+	except Exception as e:
+		frappe.log_error(f"Facebook message sync task failed: {str(e)}")
 
 def cleanup_old_logs():
 	"""Weekly task to cleanup old logs"""

@@ -5,6 +5,7 @@ def after_install():
 	create_custom_roles()
 	create_item_group()
 	setup_permissions()
+	setup_communication_medium()
 
 def create_custom_roles():
 	"""Create Facebook-specific roles"""
@@ -73,3 +74,11 @@ def setup_permissions():
 			doc_perm.write = perm.get("write", 0)
 			doc_perm.create = perm.get("create", 0)
 			doc_perm.insert(ignore_permissions=True)
+
+def setup_communication_medium():
+	"""Setup Facebook Messenger as communication medium"""
+	if not frappe.db.exists("Communication Medium Type", "Facebook Messenger"):
+		medium = frappe.new_doc("Communication Medium Type")
+		medium.communication_medium_type = "Facebook Messenger"
+		medium.insert(ignore_permissions=True)
+		frappe.db.commit()

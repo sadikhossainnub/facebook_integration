@@ -43,7 +43,7 @@ web_include_css = "/assets/facebook_integration/css/facebook_integration.css"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {"Communication" : "public/js/communication.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -154,7 +154,8 @@ scheduler_events = {
 	],
 	"cron": {
 		"*/5 * * * *": [
-			"facebook_integration.tasks.fetch_leads"
+			"facebook_integration.tasks.fetch_leads",
+			"facebook_integration.tasks.sync_messages"
 		],
 		"0 1 * * *": [
 			"facebook_integration.tasks.sync_shop_data"

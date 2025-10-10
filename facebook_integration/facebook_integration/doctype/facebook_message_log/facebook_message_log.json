@@ -24,7 +24,8 @@
   "linked_issue",
   "sent_at",
   "section_break_ccwo",
-  "content"
+  "content",
+  "communication"
  ],
  "fields": [
   {
@@ -125,6 +126,13 @@
   {
    "fieldname": "section_break_ccwo",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "communication",
+   "fieldtype": "Link",
+   "label": "Communication",
+   "options": "Communication",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,

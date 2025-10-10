@@ -1,0 +1,142 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "facebook_account",
+  "post_id",
+  "comment_id",
+  "parent_comment_id",
+  "column_break_1",
+  "commenter_id",
+  "commenter_name",
+  "comment_type",
+  "created_time",
+  "section_break_2",
+  "message",
+  "attachment_url",
+  "like_count",
+  "reply_count"
+ ],
+ "fields": [
+  {
+   "default": "CMT-LOG-.YYYY.-.MM.-.DD.-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CMT-LOG-.YYYY.-.MM.-.DD.-"
+  },
+  {
+   "fieldname": "facebook_account",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Facebook Account",
+   "options": "Facebook Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "post_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Post ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "comment_id",
+   "fieldtype": "Data",
+   "label": "Comment ID",
+   "unique": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "parent_comment_id",
+   "fieldtype": "Data",
+   "label": "Parent Comment ID"
+  },
+  {
+   "fieldname": "commenter_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Commenter ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "commenter_name",
+   "fieldtype": "Data",
+   "label": "Commenter Name"
+  },
+  {
+   "fieldname": "comment_type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "comment\nreply\nreaction",
+   "default": "comment"
+  },
+  {
+   "fieldname": "created_time",
+   "fieldtype": "Datetime",
+   "label": "Created Time"
+  },
+  {
+   "fieldname": "message",
+   "fieldtype": "Text",
+   "label": "Message"
+  },
+  {
+   "fieldname": "attachment_url",
+   "fieldtype": "Data",
+   "label": "Attachment URL"
+  },
+  {
+   "fieldname": "like_count",
+   "fieldtype": "Int",
+   "label": "Like Count",
+   "default": 0
+  },
+  {
+   "fieldname": "reply_count",
+   "fieldtype": "Int",
+   "label": "Reply Count",
+   "default": 0
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Facebook Integration",
+ "name": "Comment Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Facebook Agent",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

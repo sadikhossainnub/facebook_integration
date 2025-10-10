@@ -107,30 +107,17 @@ def process_entry(entry):
 def process_message_event(messaging_event):
 	"""Process a messaging event"""
 	try:
-		message = messaging_event.get("message", {})
-		sender = messaging_event.get("sender", {})
+		# Get account by page ID
 		recipient = messaging_event.get("recipient", {})
+		account_name = get_account_by_page_id(recipient.get("id"))
 		
-		# Create Facebook Message Log
-		message_log = frappe.new_doc("Facebook Message Log")
-		message_log.message_id = message.get("mid")
-		message_log.sender_id = sender.get("id")
-		message_log.recipient_id = recipient.get("id")
-		message_log.content = message.get("text", "")
-		message_log.direction = "incoming"
-		message_log.status = "received"
-		message_log.received_at = frappe.utils.now()
+		if not account_name:
+			frappe.log_error(f"No Facebook account found for page ID: {recipient.get('id')}")
+			return
 		
-		# Handle different message types
-		if "attachments" in message:
-			attachment = message["attachments"][0]
-			message_log.message_type = attachment.get("type", "file")
-			message_log.media_url = attachment.get("payload", {}).get("url")
-		else:
-			message_log.message_type = "text"
-		
-		message_log.insert(ignore_permissions=True)
-		frappe.db.commit()
+		# Use enhanced message handler
+		from facebook_integration.api.messaging import handle_message_webhook
+		handle_message_webhook(account_name, messaging_event)
 		
 	except Exception as e:
 		frappe.log_error(f"Message processing failed: {str(e)}")
@@ -212,6 +199,7 @@ def process_account_change(account, change):
 		handle_order_webhook(account, change.get("value", {}))
 
 def process_account_message(account, messaging):
+	"""Process message for specific account"""
 	from facebook_integration.api.messaging import handle_message_webhook
 	handle_message_webhook(account, messaging)
 
